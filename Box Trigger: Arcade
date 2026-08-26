@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIVALS：竞技战场</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,"Microsoft YaHei",sans-serif;
+    background:#05070b;
+    color:white;
+    user-select:none;
+}
+
+#game{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 50% 45%,#26354d 0%,#111827 35%,#05070b 100%);
+}
+
+/* ================= 地图 ================= */
+
+#arena{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:1500px;
+    height:900px;
+    transform:translate(-50%,-50%);
+    background:
+        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),
+        #151b25;
+    background-size:50px 50px;
+    border:3px solid #303b4d;
+    box-shadow:0 0 80px rgba(0,0,0,.8);
+}
+
+.wall{
+    position:absolute;
+    background:linear-gradient(135deg,#394558,#1d2634);
+    border:2px solid #4d5a6d;
+    box-shadow:0 8px 20px rgba(0,0,0,.45);
+}
+
+.wall1{
+    left:300px;
+    top:170px;
+    width:260px;
+    height:55px;
+}
+
+.wall2{
+    right:300px;
+    top:170px;
+    width:260px;
+    height:55px;
+}
+
+.wall3{
+    left:300px;
+    bottom:170px;
+    width:260px;
+    height:55px;
+}
+
+.wall4{
+    right:300px;
+    bottom:170px;
+    width:260px;
+    height:55px;
+}
+
+.wall5{
+    left:650px;
+    top:350px;
+    width:200px;
+    height:200px;
+    border-radius:15px;
+}
+
+/* ================= 玩家 ================= */
+
+.player{
+    position:absolute;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(145deg,#42d8ff,#1976ff);
+    border:3px solid white;
+    box-shadow:0 0 20px #159cff;
+    z-index:20;
+    transform:translate(-50%,-50%);
+}
+
+.player::after{
+    content:"";
+    position:absolute;
+    width:30px;
+    height:8px;
+    background:#e8f7ff;
+    border-radius:8px;
+    right:-24px;
+    top:14px;
+    transform-origin:left center;
+    box-shadow:0 0 8px #fff;
+}
+
+.enemy{
+    position:absolute;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:linear-gradient(145deg,#ff5364,#9d1225);
+    border:3px solid #ffb0b8;
+    box-shadow:0 0 18px #ff263f;
+    z-index:15;
+    transform:translate(-50%,-50%);
+}
+
+.enemy::after{
+    content:"";
+    position:absolute;
+    width:28px;
+    height:7px;
+    background:#ffdddd;
+    border-radius:7px;
+    left:-20px;
+    top:14px;
+    box-shadow:0 0 8px #fff;
+}
+
+.healthBar{
+    position:absolute;
+    width:55px;
+    height:6px;
+    background:#111;
+    border:1px solid #000;
+    border-radius:5px;
+    left:50%;
+    top:-13px;
+    transform:translateX(-50%);
+    overflow:hidden;
+}
+
+.healthFill{
+    width:100%;
+    height:100%;
+    background:#28e56c;
+}
+
+/* ================= 子弹 ================= */
+
+.bullet{
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 0 12px #ffe600;
+    z-index:30;
+}
+
+/* ================= HUD ================= */
+
+#hud{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:100;
+}
+
+#topBar{
+    position:absolute;
+    left:20px;
+    right:20px;
+    top:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+}
+
+.panel{
+    background:rgba(8,12,20,.82);
+    border:1px solid #526178;
+    border-radius:12px;
+    padding:12px 16px;
+    box-shadow:0 8px 25px rgba(0,0,0,.35);
+    backdrop-filter:blur(8px);
+}
+
+.title{
+    font-size:24px;
+    font-weight:bold;
+    letter-spacing:2px;
+}
+
+.subtitle{
+    color:#91a2bd;
+    font-size:12px;
+    margin-top:3px;
+}
+
+.stats{
+    display:flex;
+    gap:20px;
+    font-size:15px;
+}
+
+.stat strong{
+    color:#58d9ff;
+    font-size:20px;
+}
+
+#healthBox{
+    position:absolute;
+    left:25px;
+    bottom:25px;
+    width:270px;
+}
+
+.label{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:7px;
+}
+
+.bigBar{
+    height:18px;
+    background:#11151d;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid #4a5668;
+}
+
+#playerHealth{
+    width:100%;
+    height:100%;
+    background:linear-gradient(90deg,#16c96b,#7cffaa);
+    transition:.2s;
+}
+
+#ammoBox{
+    position:absolute;
+    right:25px;
+    bottom:25px;
+    text-align:right;
+}
+
+#ammo{
+    font-size:42px;
+    font-weight:bold;
+}
+
+#reloadText{
+    color:#ffcf4a;
+    min-height:20px;
+}
+
+#crosshair{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:28px;
+    height:28px;
+    transform:translate(-50%,-50%);
+}
+
+#crosshair::before,
+#crosshair::after{
+    content:"";
+    position:absolute;
+    background:white;
+    box-shadow:0 0 5px black;
+}
+
+#crosshair::before{
+    width:28px;
+    height:2px;
+    top:13px;
+}
+
+#crosshair::after{
+    width:2px;
+    height:28px;
+    left:13px;
+}
+
+/* ================= 提示 ================= */
+
+#message{
+    position:absolute;
+    left:50%;
+    top:80px;
+    transform:translateX(-50%);
+    padding:10px 20px;
+    background:rgba(0,0,0,.65);
+    border-radius:20px;
+    color:#fff;
+    opacity:0;
+    transition:.25s;
+}
+
+#message.show{
+    opacity:1;
+}
+
+/* ================= 开始 / 结束 ================= */
+
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(2,5,10,.82);
+    backdrop-filter:blur(8px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:500;
+}
+
+.menu{
+    width:min(520px,90%);
+    text-align:center;
+    background:linear-gradient(145deg,#182233,#0b111b);
+    border:1px solid #53627a;
+    border-radius:20px;
+    padding:40px;
+    box-shadow:0 20px 80px rgba(0,0,0,.7);
+}
+
+.menu h1{
+    font-size:48px;
+    margin-bottom:8px;
+    letter-spacing:4px;
+}
+
+.menu h2{
+    color:#5fdcff;
+    margin-bottom:20px;
+}
+
+.menu p{
+    color:#aab8cb;
+    line-height:1.8;
+    margin-bottom:25px;
+}
+
+button{
+    border:none;
+    border-radius:12px;
+    padding:14px 35px;
+    font-size:20px;
+    font-weight:bold;
+    color:white;
+    background:linear-gradient(135deg,#087cff,#0050c9);
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(0,100,255,.3);
+}
+
+button:hover{
+    transform:translateY(-2px);
+    filter:brightness(1.15);
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* ================= 手机操作 ================= */
+
+#mobileControls{
+    position:absolute;
+    inset:0;
+    z-index:200;
+    pointer-events:none;
+}
+
+.mobileBtn{
+    position:absolute;
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    background:rgba(255,255,255,.12);
+    border:2px solid rgba(255,255,255,.3);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+    pointer-events:auto;
+    touch-action:none;
+}
+
+#up{
+    left:85px;
+    bottom:145px;
+}
+
+#down{
+    left:85px;
+    bottom:15px;
+}
+
+#left{
+    left:15px;
+    bottom:80px;
+}
+
+#right{
+    left:155px;
+    bottom:80px;
+}
+
+#fireBtn{
+    right:30px;
+    bottom:70px;
+    width:90px;
+    height:90px;
+    background:rgba(255,50,70,.25);
+}
+
+#reloadBtn{
+    right:145px;
+    bottom:40px;
+    width:65px;
+    height:65px;
+}
+
+@media(min-width:800px){
+    #mobileControls{
+        display:none;
+    }
+}
+
+/* ================= 命中闪光 ================= */
+
+.hit{
+    position:absolute;
+    width:35px;
+    height:35px;
+    border:3px solid #ffe600;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    animation:hit .3s forwards;
+    z-index:40;
+}
+
+@keyframes hit{
+    from{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(.5);
+    }
+    to{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(2);
+    }
+}
+
+.damageFlash{
+    position:absolute;
+    inset:0;
+    background:rgba(255,0,0,.25);
+    z-index:90;
+    pointer-events:none;
+    animation:flash .2s forwards;
+}
+
+@keyframes flash{
+    from{opacity:1}
+    to{opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+    <div id="arena">
+
+        <div class="wall wall1"></div>
+        <div class="wall wall2"></div>
+        <div class="wall wall3"></div>
+        <div class="wall wall4"></div>
+        <div class="wall wall5"></div>
+
+        <div id="player" class="player"></div>
+
+    </div>
+
+    <!-- HUD -->
+
+    <div id="hud">
+
+        <div id="topBar">
+
+            <div class="panel">
+                <div class="title">⚔️ RIVALS</div>
+                <div class="subtitle">竞技战场</div>
+            </div>
+
+            <div class="panel stats">
+                <div class="stat">
+                    击杀
+                    <strong id="kills">0</strong>
+                </div>
+
+                <div class="stat">
+                    敌人
+                    <strong id="enemyCount">0</strong>
+                </div>
+
+                <div class="stat">
+                    时间
+                    <strong id="timer">90</strong>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="crosshair"></div>
+
+        <div id="message"></div>
+
+        <div id="healthBox" class="panel">
+
+            <div class="label">
+                <span>❤️ 生命值</span>
+                <span id="healthNumber">100 / 100</span>
+            </div>
+
+            <div class="bigBar">
+                <div id="playerHealth"></div>
+            </div>
+
+        </div>
+
+        <div id="ammoBox" class="panel">
+
+            <div id="reloadText"></div>
+
+            <div>
+                <span id="ammo">12</span>
+                <span>/ 60</span>
+            </div>
+
+            <small>弹药　|　按 R 换弹</small>
+
+        </div>
+
+    </div>
+
+
+    <!-- 手机控制 -->
+
+    <div id="mobileControls">
+
+        <div class="mobileBtn" id="up">▲</div>
+        <div class="mobileBtn" id="down">▼</div>
+        <div class="mobileBtn" id="left">◀</div>
+        <div class="mobileBtn" id="right">▶</div>
+
+        <div class="mobileBtn" id="reloadBtn">R</div>
+
+        <div class="mobileBtn" id="fireBtn">🔥</div>
+
+    </div>
+
+
+    <!-- 开始菜单 -->
+
+    <div id="startScreen" class="overlay">
+
+        <div class="menu">
+
+            <h1>RIVALS</h1>
+
+            <h2>竞技战场</h2>
+
+            <p>
+                欢迎来到竞技战场！<br>
+                消灭敌人，成为最后的胜利者。
+                <br><br>
+                🎯 击败 10 名敌人即可获胜
+                <br>
+                ⏱️ 战斗时间：90 秒
+            </p>
+
+            <button onclick="startGame()">开始战斗</button>
+
+        </div>
+
+    </div>
+
+
+    <!-- 游戏结束 -->
+
+    <div id="gameOver" class="overlay hidden">
+
+        <div class="menu">
+
+            <h1 id="endTitle">战斗结束</h1>
+
+            <h2 id="endSubtitle"></h2>
+
+            <p>
+                最终击杀：
+                <strong id="finalKills">0</strong>
+                <br>
+                最终得分：
+                <strong id="finalScore">0</strong>
+            </p>
+
+            <button onclick="restartGame()">再来一局</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   RIVALS：竞技战场
+   单文件网页版射击游戏
+========================================================= */
+
+
+/* ================= 游戏数据 ================= */
+
+const arena = document.getElementById("arena");
+const playerEl = document.getElementById("player");
+
+let gameRunning = false;
+
+let player = {
+    x: 750,
+    y: 450,
+    hp: 100,
+    maxHp: 100,
+    speed: 4,
+    angle: 0
+};
+
+let ammo = 12;
+let reserveAmmo = 60;
+
+const maxAmmo = 12;
+
+let kills = 0;
+let score = 0;
+
+let enemies = [];
+let bullets = [];
+
+let keys = {};
+
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+
+let shooting = false;
+let reloading = false;
+
+let timeLeft = 90;
+
+let lastShot = 0;
+const fireDelay = 180;
+
+
+/* ================= 开始游戏 ================= */
+
+function startGame(){
+
+    document.getElementById("startScreen")
+        .classList.add("hidden");
+
+    resetGame();
+
+    gameRunning = true;
+
+    showMessage("⚔️ 战斗开始！");
+
+    requestAnimationFrame(gameLoop);
+}
+
+
+/* ================= 重置游戏 ================= */
+
+function resetGame(){
+
+    player.x = 750;
+    player.y = 450;
+    player.hp = 100;
+
+    ammo = 12;
+    reserveAmmo = 60;
+
+    kills = 0;
+    score = 0;
+
+    timeLeft = 90;
+
+    enemies = [];
+    bullets = [];
+
+    reloading = false;
+
+    updateHUD();
+
+    document.querySelectorAll(".enemy").forEach(e => e.remove());
+    document.querySelectorAll(".bullet").forEach(e => e.remove());
+
+    playerEl.style.left = player.x + "px";
+    playerEl.style.top = player.y + "px";
+
+    spawnEnemy();
+    spawnEnemy();
+    spawnEnemy();
+}
+
+
+/* ================= 游戏循环 ================= */
+
+let lastTime = performance.now();
+
+function gameLoop(now){
+
+    if(!gameRunning) return;
+
+    const delta = now - lastTime;
+
+    lastTime = now;
+
+    update(delta);
+
+    draw();
+
+    requestAnimationFrame(gameLoop);
+}
+
+
+/* ================= 更新 ================= */
+
+function update(delta){
+
+    updatePlayer();
+
+    updateEnemies();
+
+    updateBullets();
+
+    if(shooting){
+        shoot();
+    }
+
+    updateTimer(delta);
+
+    spawnLogic();
+
+    updateHUD();
+}
+
+
+/* ================= 玩家移动 ================= */
+
+function updatePlayer(){
+
+    let dx = 0;
+    let dy = 0;
+
+    if(keys["w"] || keys["ArrowUp"]) dy -= 1;
+    if(keys["s"] || keys["ArrowDown"]) dy += 1;
+    if(keys["a"] || keys["ArrowLeft"]) dx -= 1;
+    if(keys["d"] || keys["ArrowRight"]) dx += 1;
+
+    if(dx !== 0 || dy !== 0){
+
+        const length = Math.sqrt(dx*dx + dy*dy);
+
+        dx /= length;
+        dy /= length;
+
+        let speed = player.speed;
+
+        if(keys["Shift"]){
+            speed *= 1.7;
+        }
+
+        player.x += dx * speed;
+        player.y += dy * speed;
+    }
+
+    /* 地图边界 */
+
+    player.x = Math.max(30, Math.min(1470, player.x));
+    player.y = Math.max(30, Math.min(870, player.y));
+
+    /* 面向鼠标 */
+
+    const rect = arena.getBoundingClientRect();
+
+    const targetX = mouseX - rect.left;
+    const targetY = mouseY - rect.top;
+
+    player.angle = Math.atan2(
+        targetY - player.y,
+        targetX - player.x
+    );
+}
+
+
+/* ================= 绘制玩家 ================= */
+
+function draw(){
+
+    playerEl.style.left = player.x + "px";
+    playerEl.style.top = player.y + "px";
+
+    playerEl.style.transform =
+        `translate(-50%,-50%) rotate(${player.angle}rad)`;
+
+    enemies.forEach(enemy => {
+
+        enemy.el.style.left = enemy.x + "px";
+        enemy.el.style.top = enemy.y + "px";
+
+        enemy.el.style.transform =
+            `translate(-50%,-50%) rotate(${enemy.angle}rad)`;
+    });
+
+}
+
+
+/* ================= 敌人 ================= */
+
+function spawnEnemy(){
+
+    if(enemies.length >= 8) return;
+
+    let x;
+    let y;
+
+    do{
+
+        x = 80 + Math.random() * 1340;
+        y = 80 + Math.random() * 740;
+
+    }while(
+        Math.hypot(x-player.x,y-player.y) < 300
+    );
+
+    const el = document.createElement("div");
+
+    el.className = "enemy";
+
+    const healthBar = document.createElement("div");
+
+    healthBar.className = "healthBar";
+
+    const healthFill = document.createElement("div");
+
+    healthFill.className = "healthFill";
+
+    healthBar.appendChild(healthFill);
+
+    el.appendChild(healthBar);
+
+    arena.appendChild(el);
+
+    const enemy = {
+
+        x:x,
+        y:y,
+
+        hp:100,
+        maxHp:100,
+
+        speed:1.2 + Math.random() * .7,
+
+        angle:0,
+
+        el:el,
+
+        healthFill:healthFill,
+
+        lastShot:0
+
+    };
+
+    enemies.push(enemy);
+
+}
+
+
+/* ================= 敌人 AI ================= */
+
+function updateEnemies(){
+
+    enemies.forEach(enemy => {
+
+        const dx = player.x - enemy.x;
+        const dy = player.y - enemy.y;
+
+        const distance = Math.hypot(dx,dy);
+
+        enemy.angle = Math.atan2(dy,dx);
+
+        /* 靠近玩家 */
+
+        if(distance > 250){
+
+            enemy.x += dx / distance * enemy.speed;
+            enemy.y += dy / distance * enemy.speed;
+
+        }
+
+        /* 敌人射击 */
+
+        if(
+            distance < 650 &&
+            Date.now() - enemy.lastShot > 1000 + Math.random()*800
+        ){
+
+            enemyShoot(enemy);
+
+            enemy.lastShot = Date.now();
+
+        }
+
+    });
+
+}
+
+
+/* ================= 敌人射击 ================= */
+
+function enemyShoot(enemy){
+
+    const dx = player.x - enemy.x;
+    const dy = player.y - enemy.y;
+
+    const distance = Math.hypot(dx,dy);
+
+    const speed = 6;
+
+    bullets.push({
+
+        x:enemy.x,
+
+        y:enemy.y,
+
+        vx:dx/distance*speed,
+
+        vy:dy/distance*speed,
+
+        enemy:true,
+
+        damage:8,
+
+        life:120
+
+    });
+
+}
+
+
+/* ================= 玩家射击 ================= */
+
+function shoot(){
+
+    if(!gameRunning) return;
+
+    if(reloading) return;
+
+    if(ammo <= 0){
+
+        reload();
+
+        return;
+
+    }
+
+    const now = Date.now();
+
+    if(now-lastShot < fireDelay) return;
+
+    lastShot = now;
+
+    ammo--;
+
+    const rect = arena.getBoundingClientRect();
+
+    const targetX = mouseX - rect.left;
+    const targetY = mouseY - rect.top;
+
+    const angle = Math.atan2(
+        targetY-player.y,
+        targetX-player.x
+    );
+
+    const speed = 11;
+
+    bullets.push({
+
+        x:player.x,
+
+        y:player.y,
+
+        vx:Math.cos(angle)*speed,
+
+        vy:Math.sin(angle)*speed,
+
+        enemy:false,
+
+        damage:40,
+
+        life:100
+
+    });
+
+}
+
+
+/* ================= 子弹 ================= */
+
+function updateBullets(){
+
+    bullets.forEach((bullet,index)=>{
+
+        bullet.x += bullet.vx;
+        bullet.y += bullet.vy;
+
+        bullet.life--;
+
+        if(!bullet.enemy){
+
+            for(let i=enemies.length-1;i>=0;i--){
+
+                const enemy = enemies[i];
+
+                const distance =
+                    Math.hypot(
+                        bullet.x-enemy.x,
+                        bullet.y-enemy.y
+                    );
+
+                if(distance < 28){
+
+                    enemy.hp -= bullet.damage;
+
+                    createHit(enemy.x,enemy.y);
+
+                    bullet.life = 0;
+
+                    if(enemy.hp <= 0){
+
+                        killEnemy(i);
+
+                    }
+
+                    break;
+                }
+            }
+
+        }else{
+
+            const distance =
+                Math.hypot(
+                    bullet.x-player.x,
+                    bullet.y-player.y
+                );
+
+            if(distance < 28){
+
+                damagePlayer(bullet.damage);
+
+                bullet.life = 0;
+
+            }
+
+        }
+
+        /* 创建视觉 */
+
+        if(!bullet.el){
+
+            bullet.el = document.createElement("div");
+
+            bullet.el.className = "bullet";
+
+            arena.appendChild(bullet.el);
+
+        }
+
+        bullet.el.style.left = bullet.x+"px";
+        bullet.el.style.top = bullet.y+"px";
+
+        if(
+            bullet.life <= 0 ||
+            bullet.x < 0 ||
+            bullet.x > 1500 ||
+            bullet.y < 0 ||
+            bullet.y > 900
+        ){
+
+            if(bullet.el) bullet.el.remove();
+
+            bullets.splice(index,1);
+
+        }
+
+    });
+
+}
+
+
+/* ================= 击杀敌人 ================= */
+
+function killEnemy(index){
+
+    const enemy = enemies[index];
+
+    enemy.el.remove();
+
+    enemies.splice(index,1);
+
+    kills++;
+
+    score += 100;
+
+    showMessage("💥 击杀敌人！ +100");
+
+    if(kills >= 10){
+
+        winGame();
+
+    }
+
+}
+
+
+/* ================= 玩家受伤 ================= */
+
+function damagePlayer(damage){
+
+    player.hp -= damage;
+
+    const flash = document.createElement("div");
+
+    flash.className = "damageFlash";
+
+    document.getElementById("game").appendChild(flash);
+
+    setTimeout(()=>flash.remove(),200);
+
+    if(player.hp <= 0){
+
+        player.hp = 0;
+
+        loseGame();
+
+    }
+
+}
+
+
+/* ================= 命中效果 ================= */
+
+function createHit(x,y){
+
+    const hit = document.createElement("div");
+
+    hit.className = "hit";
+
+    hit.style.left = x+"px";
+    hit.style.top = y+"px";
+
+    arena.appendChild(hit);
+
+    setTimeout(()=>{
+        hit.remove();
+    },300);
+
+}
+
+
+/* ================= 换弹 ================= */
+
+function reload(){
+
+    if(reloading) return;
+
+    if(ammo >= maxAmmo) return;
+
+    if(reserveAmmo <= 0) return;
+
+    reloading = true;
+
+    document.getElementById("reloadText").textContent =
+        "🔄 换弹中...";
+
+    setTimeout(()=>{
+
+        const needed = maxAmmo-ammo;
+
+        const amount = Math.min(
+            needed,
+            reserveAmmo
+        );
+
+        ammo += amount;
+
+        reserveAmmo -= amount;
+
+        reloading = false;
+
+        document.getElementById("reloadText").textContent =
+            "";
+
+    },900);
+
+}
+
+
+/* ================= 生成敌人 ================= */
+
+let spawnCounter = 0;
+
+function spawnLogic(){
+
+    if(enemies.length < 4){
+
+        spawnCounter++;
+
+        if(spawnCounter > 40){
+
+            spawnEnemy();
+
+            spawnCounter = 0;
+
+        }
+
+    }
+
+}
+
+
+/* ================= 时间 ================= */
+
+let timerAccumulator = 0;
+
+function updateTimer(delta){
+
+    timerAccumulator += delta;
+
+    if(timerAccumulator >= 1000){
+
+        timerAccumulator = 0;
+
+        timeLeft--;
+
+        if(timeLeft <= 0){
+
+            loseGame();
+
+        }
+
+    }
+
+}
+
+
+/* ================= HUD ================= */
+
+function updateHUD(){
+
+    document.getElementById("kills").textContent =
+        kills;
+
+    document.getElementById("enemyCount").textContent =
+        enemies.length;
+
+    document.getElementById("timer").textContent =
+        timeLeft;
+
+    document.getElementById("ammo").textContent =
+        ammo;
+
+    document.getElementById("healthNumber").textContent =
+        `${player.hp} / ${player.maxHp}`;
+
+    document.getElementById("playerHealth").style.width =
+        player.hp+"%";
+
+    enemies.forEach(enemy=>{
+
+        enemy.healthFill.style.width =
+            Math.max(0,enemy.hp/enemy.maxHp*100)+"%";
+
+    });
+
+}
+
+
+/* ================= 提示 ================= */
+
+let messageTimer;
+
+function showMessage(text){
+
+    const message =
+        document.getElementById("message");
+
+    message.textContent = text;
+
+    message.classList.add("show");
+
+    clearTimeout(messageTimer);
+
+    messageTimer = setTimeout(()=>{
+
+        message.classList.remove("show");
+
+    },1200);
+
+}
+
+
+/* ================= 胜利 ================= */
+
+function winGame(){
+
+    if(!gameRunning) return;
+
+    gameRunning = false;
+
+    document.getElementById("gameOver")
+        .classList.remove("hidden");
+
+    document.getElementById("endTitle")
+        .textContent = "🏆 胜利！";
+
+    document.getElementById("endSubtitle")
+        .textContent = "你成为了竞技场的冠军！";
+
+    document.getElementById("finalKills")
+        .textContent = kills;
+
+    document.getElementById("finalScore")
+        .textContent = score;
+
+}
+
+
+/* ================= 失败 ================= */
+
+function loseGame(){
+
+    if(!gameRunning) return;
+
+    gameRunning = false;
+
+    document.getElementById("gameOver")
+        .classList.remove("hidden");
+
+    document.getElementById("endTitle")
+        .textContent = "💀 战斗失败";
+
+    document.getElementById("endSubtitle")
+        .textContent = "别放弃，再来一次！";
+
+    document.getElementById("finalKills")
+        .textContent = kills;
+
+    document.getElementById("finalScore")
+        .textContent = score;
+
+}
+
+
+/* ================= 重新开始 ================= */
+
+function restartGame(){
+
+    document.getElementById("gameOver")
+        .classList.add("hidden");
+
+    resetGame();
+
+    gameRunning = true;
+
+    lastTime = performance.now();
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+
+/* ================= 键盘 ================= */
+
+document.addEventListener("keydown",e=>{
+
+    keys[e.key] = true;
+
+    if(e.key.toLowerCase() === "r"){
+
+        reload();
+
+    }
+
+});
+
+
+document.addEventListener("keyup",e=>{
+
+    keys[e.key] = false;
+
+});
+
+
+/* ================= 鼠标 ================= */
+
+document.addEventListener("mousemove",e=>{
+
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+});
+
+
+document.addEventListener("mousedown",e=>{
+
+    if(e.button === 0){
+
+        shooting = true;
+
+    }
+
+});
+
+
+document.addEventListener("mouseup",e=>{
+
+    if(e.button === 0){
+
+        shooting = false;
+
+    }
+
+});
+
+
+/* ================= 手机控制 ================= */
+
+function mobileKey(key){
+
+    keys[key] = true;
+
+}
+
+function mobileKeyUp(key){
+
+    keys[key] = false;
+
+}
+
+
+function bindButton(id,key){
+
+    const btn = document.getElementById(id);
+
+    btn.addEventListener("pointerdown",e=>{
+
+        e.preventDefault();
+
+        mobileKey(key);
+
+    });
+
+    btn.addEventListener("pointerup",e=>{
+
+        e.preventDefault();
+
+        mobileKeyUp(key);
+
+    });
+
+    btn.addEventListener("pointercancel",()=>{
+
+        mobileKeyUp(key);
+
+    });
+
+}
+
+
+bindButton("up","w");
+bindButton("down","s");
+bindButton("left","a");
+bindButton("right","d");
+
+
+document.getElementById("reloadBtn")
+.addEventListener("pointerdown",e=>{
+
+    e.preventDefault();
+
+    reload();
+
+});
+
+
+document.getElementById("fireBtn")
+.addEventListener("pointerdown",e=>{
+
+    e.preventDefault();
+
+    shooting = true;
+
+});
+
+
+document.getElementById("fireBtn")
+.addEventListener("pointerup",e=>{
+
+    e.preventDefault();
+
+    shooting = false;
+
+});
+
+
+document.getElementById("fireBtn")
+.addEventListener("pointercancel",()=>{
+
+    shooting = false;
+
+});
+
+
+/* ================= 防止手机页面滑动 ================= */
+
+document.addEventListener("touchmove",e=>{
+
+    e.preventDefault();
+
+},{passive:false});
+
+
+/* ================= 初始显示 ================= */
+
+playerEl.style.left = player.x+"px";
+playerEl.style.top = player.y+"px";
+
+</script>
+
+</body>
+</html>
