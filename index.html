@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>RIVALS：竞技战场</title>
 
 <style>
@@ -10,624 +11,551 @@
     box-sizing:border-box;
     margin:0;
     padding:0;
-}
-
-html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
     font-family:Arial,"Microsoft YaHei",sans-serif;
-    background:#05070b;
-    color:white;
-    user-select:none;
 }
 
-#game{
-    position:relative;
+body{
+    background:#10131a;
+    color:white;
+    overflow:hidden;
+}
+
+button{
+    cursor:pointer;
+    border:none;
+    transition:.2s;
+}
+
+button:hover{
+    transform:scale(1.04);
+}
+
+.hidden{
+    display:none !important;
+}
+
+/* ============================= */
+/* 主菜单 */
+/* ============================= */
+
+#menu{
     width:100vw;
     height:100vh;
-    overflow:hidden;
+
+    display:flex;
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
     background:
-        radial-gradient(circle at 50% 45%,#26354d 0%,#111827 35%,#05070b 100%);
+    radial-gradient(circle at top,#27324b,#10131a 70%);
 }
 
-/* ================= 地图 ================= */
+.logo{
+    font-size:64px;
+    font-weight:bold;
+    letter-spacing:5px;
+    margin-bottom:10px;
+    text-shadow:
+    0 0 20px #ff4655,
+    0 0 40px #ff4655;
+}
 
-#arena{
+.subtitle{
+    color:#aaa;
+    margin-bottom:40px;
+}
+
+.menu-box{
+    background:#1b202c;
+    padding:35px;
+    border-radius:15px;
+    width:420px;
+
+    box-shadow:
+    0 0 30px rgba(0,0,0,.5);
+}
+
+.menu-box h2{
+    margin-bottom:20px;
+}
+
+.mode-buttons{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.mode-buttons button{
+    flex:1;
+    padding:15px;
+    background:#252c3d;
+    color:white;
+    border-radius:8px;
+}
+
+.mode-buttons button.active{
+    background:#ff4655;
+}
+
+.start-btn{
+    width:100%;
+    padding:18px;
+
+    font-size:20px;
+    font-weight:bold;
+
+    background:#ff4655;
+    color:white;
+
+    border-radius:8px;
+}
+
+.stats{
+    margin-top:20px;
+    background:#151922;
+    padding:15px;
+    border-radius:8px;
+    color:#ccc;
+    line-height:1.8;
+}
+
+/* ============================= */
+/* 商店 */
+/* ============================= */
+
+#shopScreen{
     position:absolute;
+    width:100vw;
+    height:100vh;
+
+    background:#10131a;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    padding:25px;
+}
+
+.shop-top{
+    width:95%;
+    display:flex;
+    justify-content:space-between;
+
+    margin-bottom:20px;
+}
+
+#shop{
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(180px,1fr));
+
+    gap:15px;
+
+    width:95%;
+    max-width:1100px;
+
+    overflow-y:auto;
+}
+
+.item{
+    background:#1d2330;
+
+    padding:18px;
+
+    border-radius:10px;
+
+    border:2px solid transparent;
+}
+
+.item:hover{
+    border-color:#ff4655;
+}
+
+.item h3{
+    margin-bottom:10px;
+}
+
+.item p{
+    color:#aaa;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.buy{
+    margin-top:12px;
+
+    width:100%;
+
+    padding:10px;
+
+    background:#ff4655;
+
+    color:white;
+
+    border-radius:6px;
+}
+
+.start-round{
+    margin-top:20px;
+
+    padding:15px 40px;
+
+    font-size:20px;
+
+    background:#38d996;
+
+    color:#08150f;
+
+    border-radius:8px;
+
+    font-weight:bold;
+}
+
+/* ============================= */
+/* 游戏 HUD */
+/* ============================= */
+
+#gameUI{
+    position:absolute;
+
+    width:100vw;
+    height:100vh;
+
+    pointer-events:none;
+}
+
+#topHUD{
+    position:absolute;
+
+    top:15px;
     left:50%;
+
+    transform:translateX(-50%);
+
+    display:flex;
+    align-items:center;
+
+    gap:30px;
+
+    background:rgba(10,12,18,.85);
+
+    padding:12px 25px;
+
+    border-radius:10px;
+
+    font-size:18px;
+}
+
+.teamA{
+    color:#4aa3ff;
+}
+
+.teamB{
+    color:#ff5b5b;
+}
+
+#playerHUD{
+    position:absolute;
+
+    bottom:20px;
+    left:20px;
+
+    background:rgba(10,12,18,.85);
+
+    padding:15px;
+
+    border-radius:10px;
+
+    min-width:250px;
+}
+
+.bar{
+    width:220px;
+    height:16px;
+
+    background:#333;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    margin-top:5px;
+    margin-bottom:10px;
+}
+
+.fill{
+    height:100%;
+
+    background:#38d996;
+
+    transition:.2s;
+}
+
+.armor{
+    background:#4aa3ff;
+}
+
+#weaponHUD{
+    position:absolute;
+
+    bottom:20px;
+    right:20px;
+
+    background:rgba(10,12,18,.85);
+
+    padding:15px;
+
+    border-radius:10px;
+
+    text-align:right;
+}
+
+#message{
+    position:absolute;
+
     top:50%;
-    width:1500px;
-    height:900px;
+
+    left:50%;
+
     transform:translate(-50%,-50%);
+
+    font-size:38px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    text-shadow:0 0 20px black;
+
+    pointer-events:none;
+}
+
+/* ============================= */
+/* 游戏地图 */
+/* ============================= */
+
+#game{
+    width:100vw;
+    height:100vh;
+
     background:
-        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),
-        #151b25;
-    background-size:50px 50px;
-    border:3px solid #303b4d;
-    box-shadow:0 0 80px rgba(0,0,0,.8);
+    linear-gradient(90deg,
+    rgba(255,255,255,.025) 1px,
+    transparent 1px),
+
+    linear-gradient(
+    rgba(255,255,255,.025) 1px,
+    transparent 1px);
+
+    background-size:40px 40px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.player,
+.bot{
+    position:absolute;
+
+    width:32px;
+    height:32px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:11px;
+
+    font-weight:bold;
+
+    transition:transform .05s linear;
+}
+
+.player{
+    background:#4aa3ff;
+
+    box-shadow:
+    0 0 12px #4aa3ff;
+}
+
+.bot.teamBlue{
+    background:#4aa3ff;
+}
+
+.bot.teamRed{
+    background:#ff5b5b;
+}
+
+.dead{
+    opacity:.25;
 }
 
 .wall{
     position:absolute;
-    background:linear-gradient(135deg,#394558,#1d2634);
-    border:2px solid #4d5a6d;
-    box-shadow:0 8px 20px rgba(0,0,0,.45);
-}
 
-.wall1{
-    left:300px;
-    top:170px;
-    width:260px;
-    height:55px;
-}
+    background:#2a303c;
 
-.wall2{
-    right:300px;
-    top:170px;
-    width:260px;
-    height:55px;
-}
+    border:2px solid #3b4353;
 
-.wall3{
-    left:300px;
-    bottom:170px;
-    width:260px;
-    height:55px;
-}
-
-.wall4{
-    right:300px;
-    bottom:170px;
-    width:260px;
-    height:55px;
-}
-
-.wall5{
-    left:650px;
-    top:350px;
-    width:200px;
-    height:200px;
-    border-radius:15px;
-}
-
-/* ================= 玩家 ================= */
-
-.player{
-    position:absolute;
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    background:linear-gradient(145deg,#42d8ff,#1976ff);
-    border:3px solid white;
-    box-shadow:0 0 20px #159cff;
-    z-index:20;
-    transform:translate(-50%,-50%);
-}
-
-.player::after{
-    content:"";
-    position:absolute;
-    width:30px;
-    height:8px;
-    background:#e8f7ff;
-    border-radius:8px;
-    right:-24px;
-    top:14px;
-    transform-origin:left center;
-    box-shadow:0 0 8px #fff;
-}
-
-.enemy{
-    position:absolute;
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:linear-gradient(145deg,#ff5364,#9d1225);
-    border:3px solid #ffb0b8;
-    box-shadow:0 0 18px #ff263f;
-    z-index:15;
-    transform:translate(-50%,-50%);
-}
-
-.enemy::after{
-    content:"";
-    position:absolute;
-    width:28px;
-    height:7px;
-    background:#ffdddd;
-    border-radius:7px;
-    left:-20px;
-    top:14px;
-    box-shadow:0 0 8px #fff;
-}
-
-.healthBar{
-    position:absolute;
-    width:55px;
-    height:6px;
-    background:#111;
-    border:1px solid #000;
     border-radius:5px;
-    left:50%;
-    top:-13px;
-    transform:translateX(-50%);
-    overflow:hidden;
 }
-
-.healthFill{
-    width:100%;
-    height:100%;
-    background:#28e56c;
-}
-
-/* ================= 子弹 ================= */
 
 .bullet{
     position:absolute;
-    width:8px;
-    height:8px;
+
+    width:7px;
+    height:7px;
+
     border-radius:50%;
-    background:#fff;
-    box-shadow:0 0 12px #ffe600;
-    z-index:30;
-}
 
-/* ================= HUD ================= */
+    background:#ffe16a;
 
-#hud{
-    position:absolute;
-    left:0;
-    top:0;
-    width:100%;
-    height:100%;
     pointer-events:none;
-    z-index:100;
 }
 
-#topBar{
+.grenade{
     position:absolute;
-    left:20px;
-    right:20px;
-    top:18px;
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-}
 
-.panel{
-    background:rgba(8,12,20,.82);
-    border:1px solid #526178;
-    border-radius:12px;
-    padding:12px 16px;
-    box-shadow:0 8px 25px rgba(0,0,0,.35);
-    backdrop-filter:blur(8px);
-}
+    width:14px;
+    height:14px;
 
-.title{
-    font-size:24px;
-    font-weight:bold;
-    letter-spacing:2px;
-}
+    border-radius:50%;
 
-.subtitle{
-    color:#91a2bd;
-    font-size:12px;
-    margin-top:3px;
-}
-
-.stats{
-    display:flex;
-    gap:20px;
-    font-size:15px;
-}
-
-.stat strong{
-    color:#58d9ff;
-    font-size:20px;
-}
-
-#healthBox{
-    position:absolute;
-    left:25px;
-    bottom:25px;
-    width:270px;
-}
-
-.label{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:7px;
-}
-
-.bigBar{
-    height:18px;
-    background:#11151d;
-    border-radius:10px;
-    overflow:hidden;
-    border:1px solid #4a5668;
-}
-
-#playerHealth{
-    width:100%;
-    height:100%;
-    background:linear-gradient(90deg,#16c96b,#7cffaa);
-    transition:.2s;
-}
-
-#ammoBox{
-    position:absolute;
-    right:25px;
-    bottom:25px;
-    text-align:right;
-}
-
-#ammo{
-    font-size:42px;
-    font-weight:bold;
-}
-
-#reloadText{
-    color:#ffcf4a;
-    min-height:20px;
+    background:#44dd77;
 }
 
 #crosshair{
     position:absolute;
-    left:50%;
-    top:50%;
-    width:28px;
-    height:28px;
+
+    width:24px;
+    height:24px;
+
+    border:2px solid white;
+
+    border-radius:50%;
+
+    pointer-events:none;
+
     transform:translate(-50%,-50%);
 }
 
-#crosshair::before,
-#crosshair::after{
-    content:"";
+/* ============================= */
+/* 结束画面 */
+/* ============================= */
+
+#result{
     position:absolute;
-    background:white;
-    box-shadow:0 0 5px black;
-}
 
-#crosshair::before{
-    width:28px;
-    height:2px;
-    top:13px;
-}
+    width:100vw;
+    height:100vh;
 
-#crosshair::after{
-    width:2px;
-    height:28px;
-    left:13px;
-}
+    background:rgba(0,0,0,.88);
 
-/* ================= 提示 ================= */
-
-#message{
-    position:absolute;
-    left:50%;
-    top:80px;
-    transform:translateX(-50%);
-    padding:10px 20px;
-    background:rgba(0,0,0,.65);
-    border-radius:20px;
-    color:#fff;
-    opacity:0;
-    transition:.25s;
-}
-
-#message.show{
-    opacity:1;
-}
-
-/* ================= 开始 / 结束 ================= */
-
-.overlay{
-    position:absolute;
-    inset:0;
-    background:rgba(2,5,10,.82);
-    backdrop-filter:blur(8px);
     display:flex;
+
     justify-content:center;
+
     align-items:center;
-    z-index:500;
+
+    z-index:20;
 }
 
-.menu{
-    width:min(520px,90%);
+.result-box{
+    background:#1d2330;
+
+    padding:45px;
+
+    border-radius:15px;
+
     text-align:center;
-    background:linear-gradient(145deg,#182233,#0b111b);
-    border:1px solid #53627a;
-    border-radius:20px;
-    padding:40px;
-    box-shadow:0 20px 80px rgba(0,0,0,.7);
+
+    width:400px;
 }
 
-.menu h1{
-    font-size:48px;
-    margin-bottom:8px;
-    letter-spacing:4px;
-}
-
-.menu h2{
-    color:#5fdcff;
+.result-box h1{
     margin-bottom:20px;
+
+    font-size:45px;
 }
 
-.menu p{
-    color:#aab8cb;
-    line-height:1.8;
-    margin-bottom:25px;
+.result-box p{
+    color:#bbb;
+
+    margin:10px;
 }
 
-button{
-    border:none;
-    border-radius:12px;
-    padding:14px 35px;
-    font-size:20px;
-    font-weight:bold;
+.result-box button{
+    margin-top:20px;
+
+    padding:15px 40px;
+
+    background:#ff4655;
+
     color:white;
-    background:linear-gradient(135deg,#087cff,#0050c9);
-    cursor:pointer;
-    box-shadow:0 8px 20px rgba(0,100,255,.3);
-}
 
-button:hover{
-    transform:translateY(-2px);
-    filter:brightness(1.15);
-}
+    font-size:18px;
 
-.hidden{
-    display:none!important;
-}
-
-/* ================= 手机操作 ================= */
-
-#mobileControls{
-    position:absolute;
-    inset:0;
-    z-index:200;
-    pointer-events:none;
-}
-
-.mobileBtn{
-    position:absolute;
-    width:65px;
-    height:65px;
-    border-radius:50%;
-    background:rgba(255,255,255,.12);
-    border:2px solid rgba(255,255,255,.3);
-    color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-weight:bold;
-    pointer-events:auto;
-    touch-action:none;
-}
-
-#up{
-    left:85px;
-    bottom:145px;
-}
-
-#down{
-    left:85px;
-    bottom:15px;
-}
-
-#left{
-    left:15px;
-    bottom:80px;
-}
-
-#right{
-    left:155px;
-    bottom:80px;
-}
-
-#fireBtn{
-    right:30px;
-    bottom:70px;
-    width:90px;
-    height:90px;
-    background:rgba(255,50,70,.25);
-}
-
-#reloadBtn{
-    right:145px;
-    bottom:40px;
-    width:65px;
-    height:65px;
-}
-
-@media(min-width:800px){
-    #mobileControls{
-        display:none;
-    }
-}
-
-/* ================= 命中闪光 ================= */
-
-.hit{
-    position:absolute;
-    width:35px;
-    height:35px;
-    border:3px solid #ffe600;
-    border-radius:50%;
-    transform:translate(-50%,-50%);
-    animation:hit .3s forwards;
-    z-index:40;
-}
-
-@keyframes hit{
-    from{
-        opacity:1;
-        transform:translate(-50%,-50%) scale(.5);
-    }
-    to{
-        opacity:0;
-        transform:translate(-50%,-50%) scale(2);
-    }
-}
-
-.damageFlash{
-    position:absolute;
-    inset:0;
-    background:rgba(255,0,0,.25);
-    z-index:90;
-    pointer-events:none;
-    animation:flash .2s forwards;
-}
-
-@keyframes flash{
-    from{opacity:1}
-    to{opacity:0}
+    border-radius:8px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="game">
+<!-- ===================== -->
+<!-- 主菜单 -->
+<!-- ===================== -->
 
-    <div id="arena">
+<div id="menu">
 
-        <div class="wall wall1"></div>
-        <div class="wall wall2"></div>
-        <div class="wall wall3"></div>
-        <div class="wall wall4"></div>
-        <div class="wall wall5"></div>
-
-        <div id="player" class="player"></div>
-
+    <div class="logo">
+        RIVALS
     </div>
 
-    <!-- HUD -->
+    <div class="subtitle">
+        竞技战场 · ORIGINAL WEB ARENA
+    </div>
 
-    <div id="hud">
+    <div class="menu-box">
 
-        <div id="topBar">
+        <h2>选择比赛模式</h2>
 
-            <div class="panel">
-                <div class="title">⚔️ RIVALS</div>
-                <div class="subtitle">竞技战场</div>
-            </div>
+        <div class="mode-buttons">
 
-            <div class="panel stats">
-                <div class="stat">
-                    击杀
-                    <strong id="kills">0</strong>
-                </div>
+            <button onclick="selectMode(1)" id="mode1" class="active">
+                1v1
+            </button>
 
-                <div class="stat">
-                    敌人
-                    <strong id="enemyCount">0</strong>
-                </div>
+            <button onclick="selectMode(2)" id="mode2">
+                2v2
+            </button>
 
-                <div class="stat">
-                    时间
-                    <strong id="timer">90</strong>
-                </div>
-            </div>
+            <button onclick="selectMode(3)" id="mode3">
+                3v3
+            </button>
 
         </div>
 
-        <div id="crosshair"></div>
+        <button class="start-btn" onclick="startGame()">
+            开始比赛
+        </button>
 
-        <div id="message"></div>
+        <div class="stats">
 
-        <div id="healthBox" class="panel">
+            等级：<span id="levelText">1</span><br>
 
-            <div class="label">
-                <span>❤️ 生命值</span>
-                <span id="healthNumber">100 / 100</span>
-            </div>
+            XP：<span id="xpText">0</span> / 100<br>
 
-            <div class="bigBar">
-                <div id="playerHealth"></div>
-            </div>
-
-        </div>
-
-        <div id="ammoBox" class="panel">
-
-            <div id="reloadText"></div>
-
-            <div>
-                <span id="ammo">12</span>
-                <span>/ 60</span>
-            </div>
-
-            <small>弹药　|　按 R 换弹</small>
-
-        </div>
-
-    </div>
-
-
-    <!-- 手机控制 -->
-
-    <div id="mobileControls">
-
-        <div class="mobileBtn" id="up">▲</div>
-        <div class="mobileBtn" id="down">▼</div>
-        <div class="mobileBtn" id="left">◀</div>
-        <div class="mobileBtn" id="right">▶</div>
-
-        <div class="mobileBtn" id="reloadBtn">R</div>
-
-        <div class="mobileBtn" id="fireBtn">🔥</div>
-
-    </div>
-
-
-    <!-- 开始菜单 -->
-
-    <div id="startScreen" class="overlay">
-
-        <div class="menu">
-
-            <h1>RIVALS</h1>
-
-            <h2>竞技战场</h2>
-
-            <p>
-                欢迎来到竞技战场！<br>
-                消灭敌人，成为最后的胜利者。
-                <br><br>
-                🎯 击败 10 名敌人即可获胜
-                <br>
-                ⏱️ 战斗时间：90 秒
-            </p>
-
-            <button onclick="startGame()">开始战斗</button>
-
-        </div>
-
-    </div>
-
-
-    <!-- 游戏结束 -->
-
-    <div id="gameOver" class="overlay hidden">
-
-        <div class="menu">
-
-            <h1 id="endTitle">战斗结束</h1>
-
-            <h2 id="endSubtitle"></h2>
-
-            <p>
-                最终击杀：
-                <strong id="finalKills">0</strong>
-                <br>
-                最终得分：
-                <strong id="finalScore">0</strong>
-            </p>
-
-            <button onclick="restartGame()">再来一局</button>
+            总胜场：<span id="winText">0</span>
 
         </div>
 
@@ -636,793 +564,847 @@ button:hover{
 </div>
 
 
+<!-- ===================== -->
+<!-- 商店 -->
+<!-- ===================== -->
+
+<div id="shopScreen" class="hidden">
+
+    <div class="shop-top">
+
+        <h2>
+            🔫 回合购买
+        </h2>
+
+        <h2>
+            💰 金币：
+            <span id="moneyText">1000</span>
+        </h2>
+
+    </div>
+
+
+    <div id="shop">
+
+        <div class="item">
+
+            <h3>🔫 手枪</h3>
+
+            <p>
+                伤害：20<br>
+                弹匣：12<br>
+                免费
+            </p>
+
+            <button class="buy"
+            onclick="buyWeapon('pistol')">
+                装备
+            </button>
+
+        </div>
+
+
+        <div class="item">
+
+            <h3>🔥 冲锋枪</h3>
+
+            <p>
+                伤害：10<br>
+                弹匣：30<br>
+                射速：高<br>
+                价格：500
+            </p>
+
+            <button class="buy"
+            onclick="buyWeapon('smg')">
+                购买
+            </button>
+
+        </div>
+
+
+        <div class="item">
+
+            <h3>💥 霰弹枪</h3>
+
+            <p>
+                伤害：12 × 8<br>
+                弹匣：6<br>
+                近距离强<br>
+                价格：650
+            </p>
+
+            <button class="buy"
+            onclick="buyWeapon('shotgun')">
+                购买
+            </button>
+
+        </div>
+
+
+        <div class="item">
+
+            <h3>⚔️ 步枪</h3>
+
+            <p>
+                伤害：24<br>
+                弹匣：20<br>
+                射程：高<br>
+                价格：800
+            </p>
+
+            <button class="buy"
+            onclick="buyWeapon('rifle')">
+                购买
+            </button>
+
+        </div>
+
+
+        <div class="item">
+
+            <h3>🎯 狙击枪</h3>
+
+            <p>
+                身体伤害：70<br>
+                爆头：100<br>
+                弹匣：5<br>
+                价格：1000
+            </p>
+
+            <button class="buy"
+            onclick="buyWeapon('sniper')">
+                购买
+            </button>
+
+        </div>
+
+
+        <div class="item">
+
+            <h3>🛡️ 护甲</h3>
+
+            <p>
+                增加 50 护甲<br>
+                价格：350
+            </p>
+
+            <button class="buy"
+            onclick="buyArmor()">
+                购买
+            </button>
+
+        </div>
+
+
+        <div class="item">
+
+            <h3>❤️ 医疗包</h3>
+
+            <p>
+                回复 40 HP<br>
+                价格：250
+            </p>
+
+            <button class="buy"
+            onclick="buyMedkit()">
+                购买
+            </button>
+
+        </div>
+
+
+        <div class="item">
+
+            <h3>💣 手雷</h3>
+
+            <p>
+                范围伤害<br>
+                价格：200
+            </p>
+
+            <button class="buy"
+            onclick="buyGrenade()">
+                购买
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <button class="start-round"
+    onclick="startRound()">
+        ▶ 开始回合
+    </button>
+
+</div>
+
+
+<!-- ===================== -->
+<!-- 游戏 -->
+<!-- ===================== -->
+
+<div id="game" class="hidden">
+
+    <div id="gameUI">
+
+        <div id="topHUD">
+
+            <span class="teamA">
+                蓝队 <span id="blueScore">0</span>
+            </span>
+
+            <span>
+                第 <span id="roundText">1</span> 回合
+            </span>
+
+            <span class="teamB">
+                <span id="redScore">0</span> 红队
+            </span>
+
+        </div>
+
+
+        <div id="playerHUD">
+
+            ❤️ HP
+
+            <div class="bar">
+                <div
+                class="fill"
+                id="healthBar"
+                style="width:100%">
+                </div>
+            </div>
+
+
+            🛡️ 护甲
+
+            <div class="bar">
+                <div
+                class="fill armor"
+                id="armorBar"
+                style="width:0%">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="weaponHUD">
+
+            <div id="weaponName">
+                🔫 手枪
+            </div>
+
+            <h2>
+                <span id="ammoText">
+                    12
+                </span>
+
+                /
+
+                <span id="maxAmmoText">
+                    12
+                </span>
+            </h2>
+
+            <div>
+                [R] 换弹
+                &nbsp;
+                [G] 手雷
+                &nbsp;
+                [H] 医疗
+            </div>
+
+        </div>
+
+
+        <div id="message"></div>
+
+    </div>
+
+    <div id="crosshair"></div>
+
+</div>
+
+
+<!-- ===================== -->
+<!-- 结束 -->
+<!-- ===================== -->
+
+<div id="result" class="hidden">
+
+    <div class="result-box">
+
+        <h1 id="resultTitle">
+            胜利！
+        </h1>
+
+        <p id="resultInfo"></p>
+
+        <p id="mvpInfo"></p>
+
+        <button onclick="location.reload()">
+            再玩一次
+        </button>
+
+    </div>
+
+</div>
+
+
 <script>
 
-/* =========================================================
-   RIVALS：竞技战场
-   单文件网页版射击游戏
-========================================================= */
+/* ========================================= */
+/* 游戏数据 */
+/* ========================================= */
 
+let mode = 1;
 
-/* ================= 游戏数据 ================= */
+let money = 1000;
 
-const arena = document.getElementById("arena");
-const playerEl = document.getElementById("player");
+let level = 1;
+let xp = 0;
+let wins = 0;
+
+let blueScore = 0;
+let redScore = 0;
+
+let round = 1;
 
 let gameRunning = false;
 
-let player = {
-    x: 750,
-    y: 450,
-    hp: 100,
-    maxHp: 100,
-    speed: 4,
-    angle: 0
-};
+let players = [];
 
-let ammo = 12;
-let reserveAmmo = 60;
-
-const maxAmmo = 12;
-
-let kills = 0;
-let score = 0;
-
-let enemies = [];
 let bullets = [];
+
+let grenades = [];
+
+let walls = [];
 
 let keys = {};
 
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
+let mouseX = 0;
+let mouseY = 0;
 
-let shooting = false;
-let reloading = false;
+let player;
 
-let timeLeft = 90;
+let kills = 0;
+
+let deaths = 0;
+
+
+/* ========================================= */
+/* 武器 */
+/* ========================================= */
+
+const weapons = {
+
+    pistol:{
+        name:"🔫 手枪",
+        damage:20,
+        ammo:12,
+        maxAmmo:12,
+        fireRate:400,
+        bulletSpeed:11,
+        range:700,
+        price:0
+    },
+
+    smg:{
+        name:"🔥 冲锋枪",
+        damage:10,
+        ammo:30,
+        maxAmmo:30,
+        fireRate:100,
+        bulletSpeed:12,
+        range:600,
+        price:500
+    },
+
+    shotgun:{
+        name:"💥 霰弹枪",
+        damage:12,
+        ammo:6,
+        maxAmmo:6,
+        fireRate:800,
+        bulletSpeed:10,
+        range:230,
+        pellets:8,
+        price:650
+    },
+
+    rifle:{
+        name:"⚔️ 步枪",
+        damage:24,
+        ammo:20,
+        maxAmmo:20,
+        fireRate:220,
+        bulletSpeed:15,
+        range:900,
+        price:800
+    },
+
+    sniper:{
+        name:"🎯 狙击枪",
+        damage:70,
+        ammo:5,
+        maxAmmo:5,
+        fireRate:1200,
+        bulletSpeed:22,
+        range:1300,
+        price:1000
+    }
+
+};
+
+
+let currentWeapon = "pistol";
+
+let ammo = 12;
+
+let armor = 0;
+
+let medkits = 0;
+
+let grenadeCount = 0;
 
 let lastShot = 0;
-const fireDelay = 180;
+
+let reloading = false;
 
 
-/* ================= 开始游戏 ================= */
+/* ========================================= */
+/* 模式 */
+/* ========================================= */
+
+function selectMode(number){
+
+    mode = number;
+
+    document.querySelectorAll(".mode-buttons button")
+    .forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    document
+    .getElementById("mode"+number)
+    .classList.add("active");
+
+}
+
+
+/* ========================================= */
+/* 开始游戏 */
+/* ========================================= */
 
 function startGame(){
 
-    document.getElementById("startScreen")
-        .classList.add("hidden");
-
-    resetGame();
-
-    gameRunning = true;
-
-    showMessage("⚔️ 战斗开始！");
-
-    requestAnimationFrame(gameLoop);
-}
-
-
-/* ================= 重置游戏 ================= */
-
-function resetGame(){
-
-    player.x = 750;
-    player.y = 450;
-    player.hp = 100;
-
-    ammo = 12;
-    reserveAmmo = 60;
+    blueScore = 0;
+    redScore = 0;
+    round = 1;
 
     kills = 0;
-    score = 0;
+    deaths = 0;
 
-    timeLeft = 90;
+    money = 1000;
 
-    enemies = [];
-    bullets = [];
+    document
+    .getElementById("menu")
+    .classList.add("hidden");
 
-    reloading = false;
-
-    updateHUD();
-
-    document.querySelectorAll(".enemy").forEach(e => e.remove());
-    document.querySelectorAll(".bullet").forEach(e => e.remove());
-
-    playerEl.style.left = player.x + "px";
-    playerEl.style.top = player.y + "px";
-
-    spawnEnemy();
-    spawnEnemy();
-    spawnEnemy();
-}
-
-
-/* ================= 游戏循环 ================= */
-
-let lastTime = performance.now();
-
-function gameLoop(now){
-
-    if(!gameRunning) return;
-
-    const delta = now - lastTime;
-
-    lastTime = now;
-
-    update(delta);
-
-    draw();
-
-    requestAnimationFrame(gameLoop);
-}
-
-
-/* ================= 更新 ================= */
-
-function update(delta){
-
-    updatePlayer();
-
-    updateEnemies();
-
-    updateBullets();
-
-    if(shooting){
-        shoot();
-    }
-
-    updateTimer(delta);
-
-    spawnLogic();
-
-    updateHUD();
-}
-
-
-/* ================= 玩家移动 ================= */
-
-function updatePlayer(){
-
-    let dx = 0;
-    let dy = 0;
-
-    if(keys["w"] || keys["ArrowUp"]) dy -= 1;
-    if(keys["s"] || keys["ArrowDown"]) dy += 1;
-    if(keys["a"] || keys["ArrowLeft"]) dx -= 1;
-    if(keys["d"] || keys["ArrowRight"]) dx += 1;
-
-    if(dx !== 0 || dy !== 0){
-
-        const length = Math.sqrt(dx*dx + dy*dy);
-
-        dx /= length;
-        dy /= length;
-
-        let speed = player.speed;
-
-        if(keys["Shift"]){
-            speed *= 1.7;
-        }
-
-        player.x += dx * speed;
-        player.y += dy * speed;
-    }
-
-    /* 地图边界 */
-
-    player.x = Math.max(30, Math.min(1470, player.x));
-    player.y = Math.max(30, Math.min(870, player.y));
-
-    /* 面向鼠标 */
-
-    const rect = arena.getBoundingClientRect();
-
-    const targetX = mouseX - rect.left;
-    const targetY = mouseY - rect.top;
-
-    player.angle = Math.atan2(
-        targetY - player.y,
-        targetX - player.x
-    );
-}
-
-
-/* ================= 绘制玩家 ================= */
-
-function draw(){
-
-    playerEl.style.left = player.x + "px";
-    playerEl.style.top = player.y + "px";
-
-    playerEl.style.transform =
-        `translate(-50%,-50%) rotate(${player.angle}rad)`;
-
-    enemies.forEach(enemy => {
-
-        enemy.el.style.left = enemy.x + "px";
-        enemy.el.style.top = enemy.y + "px";
-
-        enemy.el.style.transform =
-            `translate(-50%,-50%) rotate(${enemy.angle}rad)`;
-    });
+    openShop();
 
 }
 
 
-/* ================= 敌人 ================= */
+/* ========================================= */
+/* 商店 */
+/* ========================================= */
 
-function spawnEnemy(){
+function openShop(){
 
-    if(enemies.length >= 8) return;
+    gameRunning = false;
 
-    let x;
-    let y;
+    document
+    .getElementById("game")
+    .classList.add("hidden");
 
-    do{
+    document
+    .getElementById("shopScreen")
+    .classList.remove("hidden");
 
-        x = 80 + Math.random() * 1340;
-        y = 80 + Math.random() * 740;
-
-    }while(
-        Math.hypot(x-player.x,y-player.y) < 300
-    );
-
-    const el = document.createElement("div");
-
-    el.className = "enemy";
-
-    const healthBar = document.createElement("div");
-
-    healthBar.className = "healthBar";
-
-    const healthFill = document.createElement("div");
-
-    healthFill.className = "healthFill";
-
-    healthBar.appendChild(healthFill);
-
-    el.appendChild(healthBar);
-
-    arena.appendChild(el);
-
-    const enemy = {
-
-        x:x,
-        y:y,
-
-        hp:100,
-        maxHp:100,
-
-        speed:1.2 + Math.random() * .7,
-
-        angle:0,
-
-        el:el,
-
-        healthFill:healthFill,
-
-        lastShot:0
-
-    };
-
-    enemies.push(enemy);
+    document
+    .getElementById("moneyText")
+    .textContent = money;
 
 }
 
 
-/* ================= 敌人 AI ================= */
+function buyWeapon(name){
 
-function updateEnemies(){
+    let weapon = weapons[name];
 
-    enemies.forEach(enemy => {
+    if(money < weapon.price){
 
-        const dx = player.x - enemy.x;
-        const dy = player.y - enemy.y;
-
-        const distance = Math.hypot(dx,dy);
-
-        enemy.angle = Math.atan2(dy,dx);
-
-        /* 靠近玩家 */
-
-        if(distance > 250){
-
-            enemy.x += dx / distance * enemy.speed;
-            enemy.y += dy / distance * enemy.speed;
-
-        }
-
-        /* 敌人射击 */
-
-        if(
-            distance < 650 &&
-            Date.now() - enemy.lastShot > 1000 + Math.random()*800
-        ){
-
-            enemyShoot(enemy);
-
-            enemy.lastShot = Date.now();
-
-        }
-
-    });
-
-}
-
-
-/* ================= 敌人射击 ================= */
-
-function enemyShoot(enemy){
-
-    const dx = player.x - enemy.x;
-    const dy = player.y - enemy.y;
-
-    const distance = Math.hypot(dx,dy);
-
-    const speed = 6;
-
-    bullets.push({
-
-        x:enemy.x,
-
-        y:enemy.y,
-
-        vx:dx/distance*speed,
-
-        vy:dy/distance*speed,
-
-        enemy:true,
-
-        damage:8,
-
-        life:120
-
-    });
-
-}
-
-
-/* ================= 玩家射击 ================= */
-
-function shoot(){
-
-    if(!gameRunning) return;
-
-    if(reloading) return;
-
-    if(ammo <= 0){
-
-        reload();
+        showMessage("❌ 金币不足");
 
         return;
 
     }
 
-    const now = Date.now();
+    money -= weapon.price;
 
-    if(now-lastShot < fireDelay) return;
+    currentWeapon = name;
 
-    lastShot = now;
+    ammo = weapon.maxAmmo;
 
-    ammo--;
+    updateShopMoney();
 
-    const rect = arena.getBoundingClientRect();
-
-    const targetX = mouseX - rect.left;
-    const targetY = mouseY - rect.top;
-
-    const angle = Math.atan2(
-        targetY-player.y,
-        targetX-player.x
-    );
-
-    const speed = 11;
-
-    bullets.push({
-
-        x:player.x,
-
-        y:player.y,
-
-        vx:Math.cos(angle)*speed,
-
-        vy:Math.sin(angle)*speed,
-
-        enemy:false,
-
-        damage:40,
-
-        life:100
-
-    });
+    showMessage("已装备 "+weapon.name);
 
 }
 
 
-/* ================= 子弹 ================= */
+function buyArmor(){
 
-function updateBullets(){
+    if(money < 350){
 
-    bullets.forEach((bullet,index)=>{
+        showMessage("金币不足");
 
-        bullet.x += bullet.vx;
-        bullet.y += bullet.vy;
-
-        bullet.life--;
-
-        if(!bullet.enemy){
-
-            for(let i=enemies.length-1;i>=0;i--){
-
-                const enemy = enemies[i];
-
-                const distance =
-                    Math.hypot(
-                        bullet.x-enemy.x,
-                        bullet.y-enemy.y
-                    );
-
-                if(distance < 28){
-
-                    enemy.hp -= bullet.damage;
-
-                    createHit(enemy.x,enemy.y);
-
-                    bullet.life = 0;
-
-                    if(enemy.hp <= 0){
-
-                        killEnemy(i);
-
-                    }
-
-                    break;
-                }
-            }
-
-        }else{
-
-            const distance =
-                Math.hypot(
-                    bullet.x-player.x,
-                    bullet.y-player.y
-                );
-
-            if(distance < 28){
-
-                damagePlayer(bullet.damage);
-
-                bullet.life = 0;
-
-            }
-
-        }
-
-        /* 创建视觉 */
-
-        if(!bullet.el){
-
-            bullet.el = document.createElement("div");
-
-            bullet.el.className = "bullet";
-
-            arena.appendChild(bullet.el);
-
-        }
-
-        bullet.el.style.left = bullet.x+"px";
-        bullet.el.style.top = bullet.y+"px";
-
-        if(
-            bullet.life <= 0 ||
-            bullet.x < 0 ||
-            bullet.x > 1500 ||
-            bullet.y < 0 ||
-            bullet.y > 900
-        ){
-
-            if(bullet.el) bullet.el.remove();
-
-            bullets.splice(index,1);
-
-        }
-
-    });
-
-}
-
-
-/* ================= 击杀敌人 ================= */
-
-function killEnemy(index){
-
-    const enemy = enemies[index];
-
-    enemy.el.remove();
-
-    enemies.splice(index,1);
-
-    kills++;
-
-    score += 100;
-
-    showMessage("💥 击杀敌人！ +100");
-
-    if(kills >= 10){
-
-        winGame();
+        return;
 
     }
 
-}
+    if(armor >= 50){
 
+        showMessage("护甲已满");
 
-/* ================= 玩家受伤 ================= */
-
-function damagePlayer(damage){
-
-    player.hp -= damage;
-
-    const flash = document.createElement("div");
-
-    flash.className = "damageFlash";
-
-    document.getElementById("game").appendChild(flash);
-
-    setTimeout(()=>flash.remove(),200);
-
-    if(player.hp <= 0){
-
-        player.hp = 0;
-
-        loseGame();
+        return;
 
     }
 
-}
+    money -= 350;
 
+    armor = 50;
 
-/* ================= 命中效果 ================= */
+    updateShopMoney();
 
-function createHit(x,y){
-
-    const hit = document.createElement("div");
-
-    hit.className = "hit";
-
-    hit.style.left = x+"px";
-    hit.style.top = y+"px";
-
-    arena.appendChild(hit);
-
-    setTimeout(()=>{
-        hit.remove();
-    },300);
+    showMessage("🛡️ 护甲购买成功");
 
 }
 
 
-/* ================= 换弹 ================= */
+function buyMedkit(){
 
-function reload(){
+    if(money < 250){
 
-    if(reloading) return;
+        showMessage("金币不足");
 
-    if(ammo >= maxAmmo) return;
-
-    if(reserveAmmo <= 0) return;
-
-    reloading = true;
-
-    document.getElementById("reloadText").textContent =
-        "🔄 换弹中...";
-
-    setTimeout(()=>{
-
-        const needed = maxAmmo-ammo;
-
-        const amount = Math.min(
-            needed,
-            reserveAmmo
-        );
-
-        ammo += amount;
-
-        reserveAmmo -= amount;
-
-        reloading = false;
-
-        document.getElementById("reloadText").textContent =
-            "";
-
-    },900);
-
-}
-
-
-/* ================= 生成敌人 ================= */
-
-let spawnCounter = 0;
-
-function spawnLogic(){
-
-    if(enemies.length < 4){
-
-        spawnCounter++;
-
-        if(spawnCounter > 40){
-
-            spawnEnemy();
-
-            spawnCounter = 0;
-
-        }
+        return;
 
     }
 
+    money -= 250;
+
+    medkits++;
+
+    updateShopMoney();
+
 }
 
 
-/* ================= 时间 ================= */
+function buyGrenade(){
 
-let timerAccumulator = 0;
+    if(money < 200){
 
-function updateTimer(delta){
+        showMessage("金币不足");
 
-    timerAccumulator += delta;
-
-    if(timerAccumulator >= 1000){
-
-        timerAccumulator = 0;
-
-        timeLeft--;
-
-        if(timeLeft <= 0){
-
-            loseGame();
-
-        }
+        return;
 
     }
 
-}
+    money -= 200;
 
+    grenadeCount++;
 
-/* ================= HUD ================= */
-
-function updateHUD(){
-
-    document.getElementById("kills").textContent =
-        kills;
-
-    document.getElementById("enemyCount").textContent =
-        enemies.length;
-
-    document.getElementById("timer").textContent =
-        timeLeft;
-
-    document.getElementById("ammo").textContent =
-        ammo;
-
-    document.getElementById("healthNumber").textContent =
-        `${player.hp} / ${player.maxHp}`;
-
-    document.getElementById("playerHealth").style.width =
-        player.hp+"%";
-
-    enemies.forEach(enemy=>{
-
-        enemy.healthFill.style.width =
-            Math.max(0,enemy.hp/enemy.maxHp*100)+"%";
-
-    });
+    updateShopMoney();
 
 }
 
 
-/* ================= 提示 ================= */
+function updateShopMoney(){
 
-let messageTimer;
-
-function showMessage(text){
-
-    const message =
-        document.getElementById("message");
-
-    message.textContent = text;
-
-    message.classList.add("show");
-
-    clearTimeout(messageTimer);
-
-    messageTimer = setTimeout(()=>{
-
-        message.classList.remove("show");
-
-    },1200);
+    document
+    .getElementById("moneyText")
+    .textContent = money;
 
 }
 
 
-/* ================= 胜利 ================= */
+/* ========================================= */
+/* 开始回合 */
+/* ========================================= */
 
-function winGame(){
+function startRound(){
 
-    if(!gameRunning) return;
+    document
+    .getElementById("shopScreen")
+    .classList.add("hidden");
 
-    gameRunning = false;
+    document
+    .getElementById("game")
+    .classList.remove("hidden");
 
-    document.getElementById("gameOver")
-        .classList.remove("hidden");
+    clearGame();
 
-    document.getElementById("endTitle")
-        .textContent = "🏆 胜利！";
+    createMap();
 
-    document.getElementById("endSubtitle")
-        .textContent = "你成为了竞技场的冠军！";
-
-    document.getElementById("finalKills")
-        .textContent = kills;
-
-    document.getElementById("finalScore")
-        .textContent = score;
-
-}
-
-
-/* ================= 失败 ================= */
-
-function loseGame(){
-
-    if(!gameRunning) return;
-
-    gameRunning = false;
-
-    document.getElementById("gameOver")
-        .classList.remove("hidden");
-
-    document.getElementById("endTitle")
-        .textContent = "💀 战斗失败";
-
-    document.getElementById("endSubtitle")
-        .textContent = "别放弃，再来一次！";
-
-    document.getElementById("finalKills")
-        .textContent = kills;
-
-    document.getElementById("finalScore")
-        .textContent = score;
-
-}
-
-
-/* ================= 重新开始 ================= */
-
-function restartGame(){
-
-    document.getElementById("gameOver")
-        .classList.add("hidden");
-
-    resetGame();
+    createTeams();
 
     gameRunning = true;
 
-    lastTime = performance.now();
+    updateHUD();
 
-    requestAnimationFrame(gameLoop);
+    showMessage("第 "+round+" 回合");
+
+    setTimeout(()=>{
+
+        showMessage("");
+
+    },1500);
+
+    gameLoop();
 
 }
 
 
-/* ================= 键盘 ================= */
+/* ========================================= */
+/* 清理地图 */
+/* ========================================= */
+
+function clearGame(){
+
+    players = [];
+    bullets = [];
+    grenades = [];
+    walls = [];
+
+    document
+    .querySelectorAll(".player,.bot,.bullet,.wall,.grenade")
+    .forEach(e=>e.remove());
+
+}
+
+
+/* ========================================= */
+/* 创建地图 */
+/* ========================================= */
+
+function createMap(){
+
+    for(let i=0;i<7;i++){
+
+        let wall = document.createElement("div");
+
+        wall.className = "wall";
+
+        let w = 80 + Math.random()*140;
+        let h = 40 + Math.random()*80;
+
+        wall.style.width = w+"px";
+        wall.style.height = h+"px";
+
+        wall.style.left =
+        150 + Math.random()*(window.innerWidth-350)+"px";
+
+        wall.style.top =
+        100 + Math.random()*(window.innerHeight-250)+"px";
+
+        document
+        .getElementById("game")
+        .appendChild(wall);
+
+        walls.push({
+            el:wall,
+            x:parseFloat(wall.style.left),
+            y:parseFloat(wall.style.top),
+            w:w,
+            h:h
+        });
+
+    }
+
+}
+
+
+/* ========================================= */
+/* 创建队伍 */
+/* ========================================= */
+
+function createTeams(){
+
+    let game = document.getElementById("game");
+
+    /* 玩家 */
+
+    player = createCharacter(
+        "玩家",
+        "blue",
+        80,
+        window.innerHeight/2,
+        true
+    );
+
+    players.push(player);
+
+    game.appendChild(player.el);
+
+
+    /* 蓝队 NPC */
+
+    for(let i=1;i<mode;i++){
+
+        let bot = createCharacter(
+            "蓝队NPC "+i,
+            "blue",
+            80,
+            150+i*150,
+            false
+        );
+
+        players.push(bot);
+
+        game.appendChild(bot.el);
+
+    }
+
+
+    /* 红队 NPC */
+
+    for(let i=0;i<mode;i++){
+
+        let bot = createCharacter(
+            "红队NPC "+(i+1),
+            "red",
+            window.innerWidth-120,
+            150+i*150,
+            false
+        );
+
+        players.push(bot);
+
+        game.appendChild(bot.el);
+
+    }
+
+}
+
+
+/* ========================================= */
+/* 创建角色 */
+/* ========================================= */
+
+function createCharacter(name,team,x,y,isPlayer){
+
+    let el = document.createElement("div");
+
+    el.className =
+    isPlayer
+    ? "player"
+    : "bot "+(team==="blue"?"teamBlue":"teamRed");
+
+    el.textContent =
+    isPlayer
+    ? "YOU"
+    : "NPC";
+
+    el.style.left = x+"px";
+    el.style.top = y+"px";
+
+
+    return {
+
+        name:name,
+
+        team:team,
+
+        x:x,
+        y:y,
+
+        health:100,
+
+        armor:0,
+
+        alive:true,
+
+        isPlayer:isPlayer,
+
+        speed:isPlayer?4:1.5+Math.random(),
+
+        el:el,
+
+        ammo:20,
+
+        lastShot:0,
+
+        kills:0
+
+    };
+
+}
+
+
+/* ========================================= */
+/* 鼠标 */
+/* ========================================= */
+
+document.addEventListener("mousemove",e=>{
+
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    let crosshair =
+    document.getElementById("crosshair");
+
+    crosshair.style.left = mouseX+"px";
+    crosshair.style.top = mouseY+"px";
+
+});
+
+
+document.addEventListener("mousedown",()=>{
+
+    shootPlayer();
+
+});
+
+
+/* ========================================= */
+/* 键盘 */
+/* ========================================= */
 
 document.addEventListener("keydown",e=>{
 
-    keys[e.key] = true;
+    keys[e.key.toLowerCase()] = true;
 
-    if(e.key.toLowerCase() === "r"){
+    if(e.key.toLowerCase()==="r"){
 
         reload();
+
+    }
+
+    if(e.key.toLowerCase()==="h"){
+
+        useMedkit();
+
+    }
+
+    if(e.key.toLowerCase()==="g"){
+
+        throwGrenade();
 
     }
 
@@ -1431,144 +1413,1073 @@ document.addEventListener("keydown",e=>{
 
 document.addEventListener("keyup",e=>{
 
-    keys[e.key] = false;
+    keys[e.key.toLowerCase()] = false;
 
 });
 
 
-/* ================= 鼠标 ================= */
+/* ========================================= */
+/* 玩家移动 */
+/* ========================================= */
 
-document.addEventListener("mousemove",e=>{
+function movePlayer(){
 
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+    if(!player || !player.alive) return;
 
-});
+    let speed = player.speed;
 
+    let newX = player.x;
+    let newY = player.y;
 
-document.addEventListener("mousedown",e=>{
+    if(keys["w"]) newY -= speed;
+    if(keys["s"]) newY += speed;
 
-    if(e.button === 0){
+    if(keys["a"]) newX -= speed;
+    if(keys["d"]) newX += speed;
 
-        shooting = true;
+    newX =
+    Math.max(
+        0,
+        Math.min(
+            window.innerWidth-32,
+            newX
+        )
+    );
+
+    newY =
+    Math.max(
+        70,
+        Math.min(
+            window.innerHeight-40,
+            newY
+        )
+    );
+
+    if(!collidesWall(newX,newY)){
+
+        player.x = newX;
+        player.y = newY;
 
     }
 
-});
+    updateCharacter(player);
+
+}
 
 
-document.addEventListener("mouseup",e=>{
+/* ========================================= */
+/* NPC AI */
+/* ========================================= */
 
-    if(e.button === 0){
+function updateBots(){
 
-        shooting = false;
+    players.forEach(bot=>{
+
+        if(bot.isPlayer) return;
+
+        if(!bot.alive) return;
+
+
+        let enemies =
+        players.filter(p=>
+            p.alive &&
+            p.team !== bot.team
+        );
+
+        if(enemies.length===0) return;
+
+
+        /* 找最近敌人 */
+
+        let target = enemies[0];
+
+        let minDist = Infinity;
+
+        enemies.forEach(enemy=>{
+
+            let dx = enemy.x-bot.x;
+            let dy = enemy.y-bot.y;
+
+            let dist =
+            Math.sqrt(dx*dx+dy*dy);
+
+            if(dist<minDist){
+
+                minDist = dist;
+
+                target = enemy;
+
+            }
+
+        });
+
+
+        let dx = target.x-bot.x;
+        let dy = target.y-bot.y;
+
+        let dist =
+        Math.sqrt(dx*dx+dy*dy);
+
+
+        /* NPC 移动 */
+
+        if(dist>280){
+
+            let nx =
+            bot.x + dx/dist*bot.speed;
+
+            let ny =
+            bot.y + dy/dist*bot.speed;
+
+            if(!collidesWall(nx,ny)){
+
+                bot.x = nx;
+                bot.y = ny;
+
+            }
+
+        }
+
+
+        /* 随机侧移 */
+
+        if(Math.random()<0.02){
+
+            bot.y +=
+            (Math.random()-.5)*50;
+
+        }
+
+
+        updateCharacter(bot);
+
+
+        /* NPC 射击 */
+
+        if(
+            dist < 650 &&
+            Date.now()-bot.lastShot > 650
+        ){
+
+            bot.lastShot = Date.now();
+
+            shootBot(bot,target);
+
+        }
+
+    });
+
+}
+
+
+/* ========================================= */
+/* 碰撞墙 */
+/* ========================================= */
+
+function collidesWall(x,y){
+
+    for(let wall of walls){
+
+        if(
+            x+32 > wall.x &&
+            x < wall.x+wall.w &&
+            y+32 > wall.y &&
+            y < wall.y+wall.h
+        ){
+
+            return true;
+
+        }
 
     }
 
-});
-
-
-/* ================= 手机控制 ================= */
-
-function mobileKey(key){
-
-    keys[key] = true;
-
-}
-
-function mobileKeyUp(key){
-
-    keys[key] = false;
+    return false;
 
 }
 
 
-function bindButton(id,key){
+/* ========================================= */
+/* 更新角色位置 */
+/* ========================================= */
 
-    const btn = document.getElementById(id);
+function updateCharacter(p){
 
-    btn.addEventListener("pointerdown",e=>{
-
-        e.preventDefault();
-
-        mobileKey(key);
-
-    });
-
-    btn.addEventListener("pointerup",e=>{
-
-        e.preventDefault();
-
-        mobileKeyUp(key);
-
-    });
-
-    btn.addEventListener("pointercancel",()=>{
-
-        mobileKeyUp(key);
-
-    });
+    p.el.style.left = p.x+"px";
+    p.el.style.top = p.y+"px";
 
 }
 
 
-bindButton("up","w");
-bindButton("down","s");
-bindButton("left","a");
-bindButton("right","d");
+/* ========================================= */
+/* 玩家射击 */
+/* ========================================= */
+
+function shootPlayer(){
+
+    if(!gameRunning) return;
+
+    if(!player.alive) return;
+
+    if(reloading) return;
+
+    let weapon =
+    weapons[currentWeapon];
+
+    if(ammo<=0){
+
+        reload();
+
+        return;
+
+    }
+
+    if(
+        Date.now()-lastShot <
+        weapon.fireRate
+    ) return;
+
+    lastShot = Date.now();
+
+    ammo--;
+
+    updateHUD();
+
+    let pellets =
+    weapon.pellets || 1;
 
 
-document.getElementById("reloadBtn")
-.addEventListener("pointerdown",e=>{
+    for(let i=0;i<pellets;i++){
 
-    e.preventDefault();
+        let spread =
+        currentWeapon==="shotgun"
+        ? (Math.random()-.5)*0.45
+        : currentWeapon==="smg"
+        ? (Math.random()-.5)*0.12
+        : (Math.random()-.5)*0.03;
 
-    reload();
+        createBullet(
+            player,
+            mouseX,
+            mouseY,
+            weapon.damage,
+            weapon.bulletSpeed,
+            weapon.range,
+            spread
+        );
 
-});
+    }
 
+    sound(160,.04);
 
-document.getElementById("fireBtn")
-.addEventListener("pointerdown",e=>{
-
-    e.preventDefault();
-
-    shooting = true;
-
-});
-
-
-document.getElementById("fireBtn")
-.addEventListener("pointerup",e=>{
-
-    e.preventDefault();
-
-    shooting = false;
-
-});
+}
 
 
-document.getElementById("fireBtn")
-.addEventListener("pointercancel",()=>{
+/* ========================================= */
+/* NPC 射击 */
+/* ========================================= */
 
-    shooting = false;
+function shootBot(bot,target){
 
-});
+    let accuracy = 0.12;
+
+    let targetX =
+    target.x + 16 +
+    (Math.random()-.5)*60*accuracy;
+
+    let targetY =
+    target.y + 16 +
+    (Math.random()-.5)*60*accuracy;
+
+    createBullet(
+        bot,
+        targetX,
+        targetY,
+        11+Math.random()*8,
+        10,
+        700,
+        (Math.random()-.5)*0.1
+    );
+
+    sound(100,.03);
+
+}
 
 
-/* ================= 防止手机页面滑动 ================= */
+/* ========================================= */
+/* 子弹 */
+/* ========================================= */
 
-document.addEventListener("touchmove",e=>{
+function createBullet(
+    shooter,
+    targetX,
+    targetY,
+    damage,
+    speed,
+    range,
+    spread
+){
 
-    e.preventDefault();
+    let el =
+    document.createElement("div");
 
-},{passive:false});
+    el.className="bullet";
+
+    let startX =
+    shooter.x+16;
+
+    let startY =
+    shooter.y+16;
+
+    let angle =
+    Math.atan2(
+        targetY-startY,
+        targetX-startX
+    ) + spread;
+
+    let bullet = {
+
+        x:startX,
+        y:startY,
+
+        dx:Math.cos(angle)*speed,
+
+        dy:Math.sin(angle)*speed,
+
+        damage:damage,
+
+        shooter:shooter,
+
+        distance:0,
+
+        range:range,
+
+        el:el
+
+    };
+
+    bullets.push(bullet);
+
+    document
+    .getElementById("game")
+    .appendChild(el);
+
+}
 
 
-/* ================= 初始显示 ================= */
+/* ========================================= */
+/* 更新子弹 */
+/* ========================================= */
 
-playerEl.style.left = player.x+"px";
-playerEl.style.top = player.y+"px";
+function updateBullets(){
+
+    for(let i=bullets.length-1;i>=0;i--){
+
+        let b = bullets[i];
+
+        b.x += b.dx;
+        b.y += b.dy;
+
+        b.distance +=
+        Math.sqrt(
+            b.dx*b.dx+
+            b.dy*b.dy
+        );
+
+        b.el.style.left=b.x+"px";
+        b.el.style.top=b.y+"px";
+
+
+        /* 超出范围 */
+
+        if(b.distance>b.range){
+
+            removeBullet(i);
+
+            continue;
+
+        }
+
+
+        /* 墙壁 */
+
+        let hitWall = walls.some(w=>
+
+            b.x>w.x &&
+            b.x<w.x+w.w &&
+            b.y>w.y &&
+            b.y<w.y+w.h
+
+        );
+
+        if(hitWall){
+
+            removeBullet(i);
+
+            continue;
+
+        }
+
+
+        /* 打中角色 */
+
+        for(let target of players){
+
+            if(!target.alive) continue;
+
+            if(target.team===b.shooter.team)
+            continue;
+
+            let dx =
+            target.x+16-b.x;
+
+            let dy =
+            target.y+16-b.y;
+
+            if(Math.sqrt(dx*dx+dy*dy)<20){
+
+                let damage =
+                calculateDamage(
+                    b.damage,
+                    b.distance,
+                    b.range
+                );
+
+                damagePlayer(
+                    target,
+                    damage,
+                    b.shooter
+                );
+
+                removeBullet(i);
+
+                break;
+
+            }
+
+        }
+
+    }
+
+}
+
+
+function removeBullet(i){
+
+    bullets[i].el.remove();
+
+    bullets.splice(i,1);
+
+}
+
+
+/* ========================================= */
+/* 距离伤害衰减 */
+/* ========================================= */
+
+function calculateDamage(
+    damage,
+    distance,
+    range
+){
+
+    let ratio =
+    distance/range;
+
+    let multiplier =
+    Math.max(
+        .55,
+        1-ratio*.45
+    );
+
+    return damage*multiplier;
+
+}
+
+
+/* ========================================= */
+/* 伤害 */
+/* ========================================= */
+
+function damagePlayer(
+    target,
+    damage,
+    attacker
+){
+
+    if(target.armor>0){
+
+        let absorbed =
+        Math.min(
+            target.armor,
+            damage*.5
+        );
+
+        target.armor -= absorbed;
+
+        damage -= absorbed;
+
+    }
+
+    target.health -= damage;
+
+
+    if(target.isPlayer){
+
+        updateHUD();
+
+    }
+
+
+    if(target.health<=0){
+
+        killPlayer(
+            target,
+            attacker
+        );
+
+    }
+
+}
+
+
+/* ========================================= */
+/* 击杀 */
+/* ========================================= */
+
+function killPlayer(
+    target,
+    attacker
+){
+
+    if(!target.alive) return;
+
+    target.alive=false;
+
+    target.health=0;
+
+    target.el.classList.add("dead");
+
+    attacker.kills++;
+
+
+    if(target.isPlayer){
+
+        deaths++;
+
+        showMessage("💀 你已阵亡<br>等待回合结束");
+
+    }
+
+
+    if(attacker.isPlayer){
+
+        kills++;
+
+        showMessage("🎯 击杀！");
+
+        setTimeout(()=>{
+
+            if(gameRunning)
+            showMessage("");
+
+        },700);
+
+    }
+
+
+    sound(70,.12);
+
+    checkRound();
+
+}
+
+
+/* ========================================= */
+/* 检查回合 */
+/* ========================================= */
+
+function checkRound(){
+
+    let blueAlive =
+    players.some(p=>
+        p.alive &&
+        p.team==="blue"
+    );
+
+    let redAlive =
+    players.some(p=>
+        p.alive &&
+        p.team==="red"
+    );
+
+
+    if(!blueAlive){
+
+        endRound("red");
+
+    }
+
+
+    if(!redAlive){
+
+        endRound("blue");
+
+    }
+
+}
+
+
+/* ========================================= */
+/* 回合结束 */
+/* ========================================= */
+
+function endRound(winner){
+
+    if(!gameRunning) return;
+
+    gameRunning=false;
+
+
+    if(winner==="blue"){
+
+        blueScore++;
+
+        money += 300;
+
+        showMessage(
+            "🔵 蓝队胜利！<br>+300 金币"
+        );
+
+    }else{
+
+        redScore++;
+
+        money += 150;
+
+        showMessage(
+            "🔴 红队胜利<br>+150 金币"
+        );
+
+    }
+
+
+    updateHUD();
+
+    sound(300,.2);
+
+
+    setTimeout(()=>{
+
+        if(
+            blueScore>=5 ||
+            redScore>=5
+        ){
+
+            endMatch();
+
+        }else{
+
+            round++;
+
+            armor = 0;
+
+            openShop();
+
+        }
+
+    },2500);
+
+}
+
+
+/* ========================================= */
+/* 比赛结束 */
+/* ========================================= */
+
+function endMatch(){
+
+    let victory =
+    blueScore>redScore;
+
+    if(victory){
+
+        wins++;
+
+        xp += 50;
+
+        if(xp>=100){
+
+            level++;
+
+            xp-=100;
+
+        }
+
+    }else{
+
+        xp += 15;
+
+    }
+
+
+    let best =
+    players
+    .sort((a,b)=>
+        b.kills-a.kills
+    )[0];
+
+
+    document
+    .getElementById("resultTitle")
+    .textContent =
+    victory
+    ? "🏆 胜利！"
+    : "💥 战败";
+
+    document
+    .getElementById("resultInfo")
+    .innerHTML =
+
+    "最终比分<br><br>"+
+
+    "🔵 蓝队 "+blueScore+
+
+    " : "+redScore+
+
+    " 🔴 红队<br><br>"+
+
+    "你的击杀："+kills+
+
+    "<br>你的死亡："+deaths+
+
+    "<br>获得 XP："+(
+        victory?50:15
+    );
+
+
+    document
+    .getElementById("mvpInfo")
+    .innerHTML =
+
+    "⭐ MVP<br>"+
+
+    best.name+
+
+    "<br>击杀："+best.kills;
+
+
+    document
+    .getElementById("result")
+    .classList.remove("hidden");
+
+}
+
+
+/* ========================================= */
+/* 换弹 */
+/* ========================================= */
+
+function reload(){
+
+    if(reloading) return;
+
+    if(!player.alive) return;
+
+    let weapon =
+    weapons[currentWeapon];
+
+    if(ammo===weapon.maxAmmo)
+    return;
+
+    reloading=true;
+
+    showMessage("🔄 换弹中...");
+
+    sound(250,.08);
+
+    setTimeout(()=>{
+
+        ammo=weapon.maxAmmo;
+
+        reloading=false;
+
+        updateHUD();
+
+        showMessage("");
+
+    },1000);
+
+}
+
+
+/* ========================================= */
+/* 医疗 */
+/* ========================================= */
+
+function useMedkit(){
+
+    if(!gameRunning) return;
+
+    if(!player.alive) return;
+
+    if(medkits<=0){
+
+        showMessage("没有医疗包");
+
+        return;
+
+    }
+
+    if(player.health>=100){
+
+        showMessage("生命值已满");
+
+        return;
+
+    }
+
+    medkits--;
+
+    player.health =
+    Math.min(
+        100,
+        player.health+40
+    );
+
+    updateHUD();
+
+    showMessage("❤️ 回复生命");
+
+}
+
+
+/* ========================================= */
+/* 手雷 */
+/* ========================================= */
+
+function throwGrenade(){
+
+    if(!gameRunning) return;
+
+    if(!player.alive) return;
+
+    if(grenadeCount<=0){
+
+        showMessage("没有手雷");
+
+        return;
+
+    }
+
+    grenadeCount--;
+
+    let el =
+    document.createElement("div");
+
+    el.className="grenade";
+
+    let x=player.x+16;
+    let y=player.y+16;
+
+    document
+    .getElementById("game")
+    .appendChild(el);
+
+    grenades.push({
+        x:x,
+        y:y,
+        el:el,
+        time:Date.now()
+    });
+
+    setTimeout(()=>{
+
+        explodeGrenade(
+            x,y
+        );
+
+        el.remove();
+
+    },1200);
+
+}
+
+
+/* ========================================= */
+/* 手雷爆炸 */
+/* ========================================= */
+
+function explodeGrenade(x,y){
+
+    players.forEach(p=>{
+
+        if(!p.alive) return;
+
+        if(p.team==="blue") return;
+
+        let dx =
+        p.x+16-x;
+
+        let dy =
+        p.y+16-y;
+
+        let dist =
+        Math.sqrt(dx*dx+dy*dy);
+
+        if(dist<180){
+
+            let damage =
+            60*(1-dist/180);
+
+            damagePlayer(
+                p,
+                damage,
+                player
+            );
+
+        }
+
+    });
+
+    sound(50,.3);
+
+}
+
+
+/* ========================================= */
+/* HUD */
+/* ========================================= */
+
+function updateHUD(){
+
+    if(!player) return;
+
+    document
+    .getElementById("healthBar")
+    .style.width =
+    Math.max(0,player.health)+"%";
+
+    document
+    .getElementById("armorBar")
+    .style.width =
+    Math.max(0,armor*2)+"%";
+
+    document
+    .getElementById("weaponName")
+    .textContent =
+    weapons[currentWeapon].name;
+
+    document
+    .getElementById("ammoText")
+    .textContent=ammo;
+
+    document
+    .getElementById("maxAmmoText")
+    .textContent=
+    weapons[currentWeapon].maxAmmo;
+
+    document
+    .getElementById("blueScore")
+    .textContent=blueScore;
+
+    document
+    .getElementById("redScore")
+    .textContent=redScore;
+
+    document
+    .getElementById("roundText")
+    .textContent=round;
+
+}
+
+
+/* ========================================= */
+/* 信息 */
+/* ========================================= */
+
+function showMessage(text){
+
+    document
+    .getElementById("message")
+    .innerHTML=text;
+
+}
+
+
+/* ========================================= */
+/* 游戏循环 */
+/* ========================================= */
+
+function gameLoop(){
+
+    if(!gameRunning) return;
+
+    movePlayer();
+
+    updateBots();
+
+    updateBullets();
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+
+/* ========================================= */
+/* 简单音效 */
+/* ========================================= */
+
+function sound(freq,duration){
+
+    try{
+
+        let AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+        let ctx =
+        new AudioContext();
+
+        let osc =
+        ctx.createOscillator();
+
+        let gain =
+        ctx.createGain();
+
+        osc.frequency.value=freq;
+
+        gain.gain.value=.05;
+
+        osc.connect(gain);
+
+        gain.connect(ctx.destination);
+
+        osc.start();
+
+        osc.stop(
+            ctx.currentTime+duration
+        );
+
+    }catch(e){}
+
+}
+
+
+/* ========================================= */
+/* 初始化资料 */
+/* ========================================= */
+
+document
+.getElementById("levelText")
+.textContent=level;
+
+document
+.getElementById("xpText")
+.textContent=xp;
+
+document
+.getElementById("winText")
+.textContent=wins;
 
 </script>
 
