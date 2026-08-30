@@ -2486,10 +2486,30 @@ async function joinRoom() {
             return;
         }
 
-        localStorage.setItem("rivalsRoomCode", roomCode);
+       localStorage.setItem("rivalsRoomCode", roomCode);
 
-        alert("✅ 加入房间成功！\n房间代码：" + roomCode);
+// 注册当前玩家
+const playerId =
+    localStorage.getItem("rivalsPlayerId") ||
+    "player_" + Math.random().toString(36).substring(2, 10);
 
+localStorage.setItem("rivalsPlayerId", playerId);
+
+await fetch(
+    databaseURL + "/rooms/" + roomCode + "/players/" + playerId + ".json",
+    {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            joinedAt: Date.now(),
+            online: true
+        })
+    }
+);
+
+alert("✅ 加入房间成功！\n房间代码：" + roomCode);
     } catch (error) {
         console.error(error);
         alert("❌ 无法连接 Firebase，请检查网络或数据库规则");
