@@ -559,6 +559,40 @@ button{
     }
 }
 </style>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import {
+  getDatabase,
+  ref,
+  set,
+  get,
+  update,
+  onValue
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBsa-Nq-784zurdvSEhfaE8vzWmeM3DLYM",
+  authDomain: "rivals-arena-f0540.firebaseapp.com",
+  databaseURL: "https://rivals-arena-f0540-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "rivals-arena-f0540",
+  storageBucket: "rivals-arena-f0540.firebasestorage.app",
+  messagingSenderId: "170633848194",
+  appId: "1:170633848194:web:3a1a48aa42f227a8f65b9b",
+  measurementId: "G-KKQVQTT479"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.rivalsDB = db;
+window.firebaseRef = ref;
+window.firebaseSet = set;
+window.firebaseGet = get;
+window.firebaseUpdate = update;
+window.firebaseOnValue = onValue;
+
+console.log("Firebase 已连接");
+</script>
 </head>
 
 <body>
